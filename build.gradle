@@ -3,10 +3,13 @@ version '1.0-SNAPSHOT'
 apply plugin: 'java'
 apply plugin: 'application'
 
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-mainClassName = 'Application'
+mainClassName = 'ApplicationEx'
 
 repositories {
     mavenCentral()
