@@ -10,6 +10,8 @@ import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.text.edits.TextEdit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -28,6 +30,8 @@ import static org.eclipse.jdt.internal.compiler.parser.TerminalTokens.TokenNameC
 import static org.eclipse.jdt.internal.compiler.parser.TerminalTokens.TokenNameEOF;
 
 public class ApplicationEx {
+    private final static Logger log = LoggerFactory.getLogger(ApplicationEx.class);
+
     public static void main(String[] args) throws IOException, InvalidInputException, ParserConfigurationException, SAXException {
         String inputSourceCode;
         StringBuilder sb = new StringBuilder();
@@ -41,7 +45,13 @@ public class ApplicationEx {
         if (args.length == 0) {
             outputSourceCode = tokenize(inputSourceCode, System.getProperty("line.separator"));
         } else {
-            inputSourceCode = breakStyle(inputSourceCode);
+            try {
+                inputSourceCode = breakStyle(inputSourceCode);
+            } catch (Exception e) {
+                log.error("-------- parsing error --------");
+                log.error(inputSourceCode);
+                throw e;
+            }
             outputSourceCode = format(inputSourceCode, readStyle(new File(args[0])));
         }
         System.out.println(outputSourceCode);
