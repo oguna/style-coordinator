@@ -16,6 +16,6 @@ repositories {
 }
 
 dependencies {
-    compile 'org.eclipse.jdt:org.eclipse.jdt.core:3.10.0'
+    compile 'org.eclipse.jdt:org.eclipse.jdt.core:3.12.3'
     testCompile 'junit:junit:4.12'
 }
