@@ -60,7 +60,8 @@ public class ApplicationEx {
     }
 
     private static String tokenize(String source, String lineSeparator) throws InvalidInputException {
-        Objects.nonNull(source);
+        Objects.requireNonNull(source);
+        Objects.requireNonNull(lineSeparator);
         Scanner scanner = new Scanner();
         scanner.setSource(source.toCharArray());
         scanner.recordLineSeparator = false;
@@ -75,6 +76,7 @@ public class ApplicationEx {
     }
 
     private static Map<String, String> readStyle(File file) throws ParserConfigurationException, SAXException, IOException {
+        Objects.requireNonNull(file);
         // take default Eclipse formatting options
         Map<String,String> options = DefaultCodeFormatterOptions.getEclipseDefaultSettings().getMap();
         // initialize the compiler settings to be able to format 1.8 code
@@ -100,7 +102,7 @@ public class ApplicationEx {
     }
 
     private static String breakStyle(String source) throws InvalidInputException {
-        Objects.nonNull(source);
+        Objects.requireNonNull(source);
         Scanner scanner = new Scanner();
         scanner.setSource(source.toCharArray());
         scanner.recordLineSeparator = false;
@@ -121,6 +123,8 @@ public class ApplicationEx {
     }
 
     private static String format(String source, Map<String, String> style) throws IOException, ParserConfigurationException, SAXException {
+        Objects.requireNonNull(source);
+        Objects.requireNonNull(style);
         // instantiate the default code formatter with the given options
         final CodeFormatter codeFormatter = ToolFactory.createCodeFormatter(style);
 
