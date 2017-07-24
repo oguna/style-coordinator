@@ -48,7 +48,8 @@ public class ApplicationEx {
             try {
                 inputSourceCode = breakStyle(inputSourceCode);
             } catch (Exception e) {
-                log.error("-------- parsing error --------");
+                log.error("--------");
+                log.error("parsing error", e);
                 log.error(inputSourceCode);
                 throw e;
             }
@@ -101,7 +102,7 @@ public class ApplicationEx {
         return options;
     }
 
-    private static String breakStyle(String source) throws InvalidInputException {
+    public static String breakStyle(String source) throws InvalidInputException {
         Objects.requireNonNull(source);
         Scanner scanner = new Scanner();
         scanner.setSource(source.toCharArray());
@@ -112,7 +113,9 @@ public class ApplicationEx {
         StringBuilder sb = new StringBuilder();
         int tokenType;
         while ((tokenType = scanner.getNextToken()) != TokenNameEOF) {
-            sb.append(scanner.getCurrentTokenSource());
+            int start = scanner.getCurrentTokenStartPosition();
+            int end = scanner.getCurrentTokenEndPosition();
+            sb.append(source.substring(start, end + 1));
             if (tokenType == TokenNameCOMMENT_LINE) {
                 sb.append("\n");
             } else {
@@ -130,14 +133,22 @@ public class ApplicationEx {
 
         // retrieve the source to format
         String separator = System.getProperty("line.separator");
-        final TextEdit edit = codeFormatter.format(
-                CodeFormatter.K_COMPILATION_UNIT, // format a compilation unit
-                source, // source to format
-                0, // starting position
-                source.length(), // length
-                0, // initial indentation
-                separator // line separator
-        );
+        final TextEdit edit;
+        try {
+            edit = codeFormatter.format(
+                    CodeFormatter.K_COMPILATION_UNIT, // format a compilation unit
+                    source, // source to format
+                    0, // starting position
+                    source.length(), // length
+                    0, // initial indentation
+                    separator // line separator
+            );
+        } catch (RuntimeException e) {
+            log.error("--------");
+            log.error("formatting error", e);
+            log.error(source);
+            throw e;
+        }
 
         IDocument document = new Document(source);
         try {
