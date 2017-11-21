@@ -1,37 +1,42 @@
-# jdtformatter
+# Style Coordinator
 
-Eclipse JDTでソースコードのフォーマットを行うツール
+This tool coordinate the difference of coding style of each developer.
 
-## gitでの利用例
+[Source Code](style-coordinator-master.zip)
 
-本ツールはJavaで開発されているため，JDK8+が導入済で，`JAVA_HOME`が設定されている必要がある．
+## Build & Install
 
-Gradleでjdtformatterをビルドする．
-ビルド生成物が `build/install` ディレクトリ下に配置される．
+This tool requires Java8+ and environment variable `JAVA_HOME`.
 
-```
+After running the following command, the distribution directory is generated in `build/install`.
+
+```shell
 $ gradlew install
 ```
 
-生成された `jdtformatter` ディレクトリを `$HOME` 下に配置する．
+To install this tool, move generated `style-coordinator` directory under `$HOME`.
 
-`$HOME` にプロジェクト標準のスタイルおよび開発者好みのスタイルの設定を、
-それぞれ`style-default.xml`，`style.xml`という名前で保存する．
+## How to use in git
 
-プロジェクト直下に `.gitattributes`ファイルを以下の内容で追加する．
+Put style files in `$HOME`.
+File describing project standard style is named `style-default.xml`.
+File describing developer's favorite style is named `style.xml`.
 
-```
+Add `.gitattribute` in target project.
+The following code block shows content of the file.
+
+```shell
 *.java filter=format
 ```
 
-filter属性にformatが指定されたファイルをgitで操作する際に使用するコマンドを指定する．
-`--global`のオプションを`--local`に変更すると、リポジトリにのみ設定が適用される．
+Run the following command.
+If you specify an option `--global` alternative to `--local`, this configuration is available only under your repository.
 
-```
-$ git config --global filter.format.clean ~/jdtformatter/bin/jdtformatter style-default.xml
-$ git config --global filter.format.smudge ~/jdtformatter/bin/jdtformatter style.xml
+```shell
+$ git config --global filter.format.clean ~/style-coordinate/bin/style-coordinater style-default.xml
+$ git config --global filter.format.smudge ~/style-coordinator/bin/style-coordinater style.xml
 ```
 
-## Styleファイル
-- `style.xml` : Eclipse Pleiades のデフォルトのスタイル設定
-- `slf4j-idea.xml` : slf4jのIntelliJIDEAのスタイル設定．slf4jではEclipse用とIDEA用のスタイルの設定ファイルがプロジェクトに格納されているが、2つで異なる設定内容である
+## File describing style
+The file defined an open standard XML schema for describing coding style.
+You can export from Eclipse.
